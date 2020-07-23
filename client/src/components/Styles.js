@@ -1,4 +1,4 @@
-const mainColor = "#E53935";
+const mainColor = "#90CAF9";
 const mainFont = "Poppins";
 const hoverColor = "#730023";
 

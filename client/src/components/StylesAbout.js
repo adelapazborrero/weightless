@@ -23,7 +23,7 @@ const StylesAbout = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height:"100vh"
+    height: "100vh",
   },
   image_container: {
     width: "60%",
