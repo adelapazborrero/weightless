@@ -23,7 +23,7 @@ route.get("/:id", async (req, res) => {
   }
 });
 
-//FIND USER BY NAME ON THE LOGIN SCREEN
+//FIND USER BY NAME ON THE LOGIN SCREEN 
 route.get("/filtered/:username", async (req, res) => {
   try {
     const filtername = req.params.username;
@@ -78,11 +78,22 @@ route.put("/updatedaily", async (req, res) => {
   }
 });
 
-//UPDATE A SPECIFIC DAILY NEED TO GET THE SPECIFIC OBJECT INSTEAD OF USER
-route.get("/updatefeed/:id", async (req, res) => {
+//UPDATE A SPECIFIC DAILY NEED TO GET THE SPECIFIC OBJECT INSTEAD OF USER 
+route.put("/updatefeed/:username", async (req, res) => {
   try {
-    const id = req.params._id;
-    const daily = await User.find({ id: id });
+    const filtername = req.params.username;
+    const daily = await User.updateOne(
+      { username: filtername, "daily.date": req.params.date },
+      {
+        $set: {
+          "daily.$.date": req.body.date,
+          "daily.$.todays_weight": req.body.todays_weight,
+          "daily.$.walking_time": req.body.walking_time,
+          "daily.$.running_time": req.body.running_time,
+          "daily.$.exercising_time": req.body.exercising_time,
+        },
+      }
+    );
     res.json(daily);
   } catch (error) {
     res.json(error);

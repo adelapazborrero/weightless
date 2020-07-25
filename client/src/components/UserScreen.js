@@ -8,7 +8,7 @@ export default class UserScreen extends Component {
     super(props);
     let today = new Date();
     let year = today.getFullYear();
-    let month = today.getMonth();
+    let month = today.getMonth() + 1;
     let day = today.getDate();
     let todayDate = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day}`;
 
@@ -16,18 +16,19 @@ export default class UserScreen extends Component {
       username: "Xiangyi",
       date: todayDate,
       goalWeight: 58,
-      currentWeight: 62.7,
+      currentWeight: 60.1,
       difference: this.currentWeight - this.goalWeight,
     };
   }
   render() {
     return (
       <div style={StylesUser.user_screen}>
-          {/* LEFT SITE FORM */}
+        {/* LEFT SITE FORM */}
         <div>
           <form style={StylesUser.info_form}>
             <h2>Welcome, {this.state.username}</h2>
             <h2 style={StylesUser.info_title}>Today's info</h2>
+
             <input
               style={StylesUser.inputStyle}
               type="date"
@@ -37,6 +38,7 @@ export default class UserScreen extends Component {
               style={StylesUser.inputStyle}
               type="number"
               placeholder="Weight"
+              name="weight"
             />
             <input
               style={StylesUser.inputStyle}
@@ -53,7 +55,11 @@ export default class UserScreen extends Component {
               type="number"
               placeholder="Exercising time"
             />
-            <input style={StylesUser.inputStyle} type="submit" value="SAVE" />
+            <input
+              style={StylesUser.inputStyleSave}
+              type="submit"
+              value="SAVE"
+            />
           </form>
         </div>
 
@@ -61,15 +67,17 @@ export default class UserScreen extends Component {
         <div style={StylesUser.todays_data}>
           <div style={StylesUser.todays_data_container}>
             <h3>Current</h3>
-            <h3>{this.state.currentWeight}kg</h3>
+            <h3 style={{ fontWeight: "normal" }}>
+              {this.state.currentWeight}kg
+            </h3>
           </div>
           <div style={StylesUser.todays_data_container}>
             <h3>Goal</h3>
-            <h3>{this.state.goalWeight}kg</h3>
+            <h3 style={{ fontWeight: "normal" }}>{this.state.goalWeight}kg</h3>
           </div>
           <div style={StylesUser.todays_data_container}>
             <h3>Diff</h3>
-            <h3>
+            <h3 style={{ fontWeight: "normal" }}>
               {(this.state.currentWeight - this.state.goalWeight).toFixed(1)}kg
             </h3>
           </div>
@@ -93,7 +101,9 @@ export default class UserScreen extends Component {
                 boxShadow: "0px 5px 10px 0px grey",
               }}
             ></div>
-            <h2 style={{ fontFamily: "Poppins" }}>Update Info</h2>
+            <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
+              Update Info
+            </h2>
             <input
               style={StylesUser.update_input}
               type="date"
@@ -119,7 +129,11 @@ export default class UserScreen extends Component {
               type="number"
               placeholder="Exercising time"
             />
-            <input style={StylesUser.update_input} type="submit" value="SAVE" />
+            <input
+              style={StylesUser.inputStyleSave}
+              type="submit"
+              value="SAVE"
+            />
           </form>
         </div>
       </div>

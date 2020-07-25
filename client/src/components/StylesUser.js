@@ -8,6 +8,7 @@ const StylesUser = {
   },
   info_title: {
     color: "black",
+    fontWeight:"normal"
   },
   info_form: {
     fontFamily: Styles.mainFont,
@@ -31,6 +32,21 @@ const StylesUser = {
     border: "none",
     borderRadius: "10px",
     backgroundColor: "#EFEFEF",
+    //To doublecheck Style
+    opacity:0.7
+  },
+  inputStyleSave: {
+    padding: "10px",
+    width: "70%",
+    fontFamily: Styles.mainFont,
+    outline: "none",
+    border: "none",
+    borderRadius: "10px",
+    backgroundColor: "#EFEFEF",
+    //To doublecheck Style
+    opacity:1,
+    color:"dodgerblue",
+    cursor: "pointer"
   },
   todays_data: {
     margin: "0 auto",
@@ -69,6 +85,9 @@ const StylesUser = {
     border: "none",
     borderRadius: "10px",
     backgroundColor: "#EFEFEF",
+
+    //to doublecheck Style
+    opacity:0.7
   },
 };
 

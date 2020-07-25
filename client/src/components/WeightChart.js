@@ -30,7 +30,7 @@ export default class WeightChart extends Component {
   render() {
     return (
       <div style={{ margin: "20px auto" }}>
-        <h2 style={{fontFamily: Styles.mainFont}}>Weight record</h2>
+        <h2 style={{fontFamily: Styles.mainFont, fontWeight:"normal"}}>Weight record</h2>
         <LineChart width={600} height={300} data={this.state.data}>
           <Line type="monotone" dataKey="kg" stroke={Styles.mainColor} />
           <XAxis dataKey="date" />
