@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import WeightChart from "./WeightChart";
 import StylesUser from "./StylesUser";
 import ExerciseChart from "./ExerciseChart";
+import UpdateToday from "./UpdateToday";
 
 export default class UserScreen extends Component {
   constructor(props) {
@@ -13,55 +14,35 @@ export default class UserScreen extends Component {
     let todayDate = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day}`;
 
     this.state = {
-      username: "Xiangyi",
+      currentUser: this.props.location.state[0],
+      username: "",
       date: todayDate,
-      goalWeight: 58,
-      currentWeight: 60.1,
+      goalWeight: "",
+      currentWeight: "",
+      daily: [],
       difference: this.currentWeight - this.goalWeight,
     };
   }
+
+  async componentDidMount() {
+    const data = await fetch(
+      `http://localhost:8000/users/${this.state.currentUser._id}`
+    );
+    const person = await data.json();
+
+    this.setState({
+      username: person.username,
+      currentWeight: person.currentWeight,
+      goalWeight: person.goal,
+      daily: person.daily,
+    });
+  }
+
   render() {
     return (
       <div style={StylesUser.user_screen}>
         {/* LEFT SITE FORM */}
-        <div>
-          <form style={StylesUser.info_form}>
-            <h2>Welcome, {this.state.username}</h2>
-            <h2 style={StylesUser.info_title}>Today's info</h2>
-
-            <input
-              style={StylesUser.inputStyle}
-              type="date"
-              value={this.state.date}
-            />
-            <input
-              style={StylesUser.inputStyle}
-              type="number"
-              placeholder="Weight"
-              name="weight"
-            />
-            <input
-              style={StylesUser.inputStyle}
-              type="number"
-              placeholder="Walking time"
-            />
-            <input
-              style={StylesUser.inputStyle}
-              type="number"
-              placeholder="Running time"
-            />
-            <input
-              style={StylesUser.inputStyle}
-              type="number"
-              placeholder="Exercising time"
-            />
-            <input
-              style={StylesUser.inputStyleSave}
-              type="submit"
-              value="SAVE"
-            />
-          </form>
-        </div>
+        <UpdateToday username={this.state.username} date={this.state.date}/>
 
         {/*Current stats */}
         <div style={StylesUser.todays_data}>
@@ -84,8 +65,8 @@ export default class UserScreen extends Component {
         </div>
 
         {/*CHARTS */}
-        <WeightChart />
-        <ExerciseChart />
+        <WeightChart daily={this.state.daily} />
+        <ExerciseChart daily={this.state.daily} />
 
         <div>
           <form style={StylesUser.update_form}>

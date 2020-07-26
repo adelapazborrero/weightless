@@ -23,7 +23,7 @@ route.get("/:id", async (req, res) => {
   }
 });
 
-//FIND USER BY NAME ON THE LOGIN SCREEN 
+//FIND USER BY NAME ON THE LOGIN SCREEN
 route.get("/filtered/:username", async (req, res) => {
   try {
     const filtername = req.params.username;
@@ -56,11 +56,12 @@ route.post("/addnewuser", async (req, res) => {
   }
 });
 
-//PUSH NEW DAILY INTO ARRAY OF SPECIFIC PERSON
+//PUSH NEW DAILY INTO ARRAY OF SPECIFIC PERSON NEEDS TO UPDATE CURRENT WEIGHT
 route.put("/updatedaily", async (req, res) => {
   const newFeed = {
     _id: mongoose.Types.ObjectId(),
     date: req.body.date,
+    currentWeight: req.body.todays_weight,
     todays_weight: req.body.todays_weight,
     walking_time: req.body.walking_time,
     running_time: req.body.running_time,
@@ -78,7 +79,7 @@ route.put("/updatedaily", async (req, res) => {
   }
 });
 
-//UPDATE A SPECIFIC DAILY NEED TO GET THE SPECIFIC OBJECT INSTEAD OF USER 
+//UPDATE A SPECIFIC DAILY NEED TO GET THE SPECIFIC OBJECT INSTEAD OF USER
 route.put("/updatefeed/:username", async (req, res) => {
   try {
     const filtername = req.params.username;
@@ -95,6 +96,19 @@ route.put("/updatefeed/:username", async (req, res) => {
       }
     );
     res.json(daily);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+//!!UPDATE CURRENT OF THE PERSON NEEDS FIX
+route.put("/updatecurrent", async (req, res) => {
+  try {
+    const userfound = await User.findOneAndUpdate(
+      { _id: req.body.id },
+      { $set: { currentWeight: req.body.currentWeight } }
+    );
+    res.json(userfound);
   } catch (error) {
     res.json(error);
   }
