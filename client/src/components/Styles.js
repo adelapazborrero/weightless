@@ -112,6 +112,28 @@ const styles = {
     justifyContent: "center",
     alignItems: "end",
   },
+  form_div_signin: {
+    width: "600px",
+    height: "90vh",
+    display: "flex",
+    justifyContent: "center",
+    padding: "20px",
+    boxShadow: "0px 10px 10px 2px lightgrey",
+    position: "absolute",
+    top: "1%",
+    right: "25%",
+    left: "25%",
+    backgroundColor: "rgb(255, 255, 255, 0.8)",
+    overflow:"hidden"
+  },
+  signin_form: {
+    width: "60%",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "end",
+  },
   input: {
     padding: "10px",
     width: "90%",

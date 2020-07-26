@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import StylesUser from "./StylesUser";
 import axios from "axios";
 
-export default class UpdateToday extends Component {
+export default class UpdateDaily extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       date: this.props.date,
       todays_weight: "",
@@ -12,6 +13,7 @@ export default class UpdateToday extends Component {
       running_time: "",
       exercising_time: "",
     };
+
     this.handleDate = this.handleDate.bind(this);
     this.handleWeight = this.handleWeight.bind(this);
     this.handleWalkingTime = this.handleWalkingTime.bind(this);
@@ -24,6 +26,7 @@ export default class UpdateToday extends Component {
     this.setState({
       date: e.target.value,
     });
+    
   }
 
   handleWeight(e) {
@@ -52,7 +55,6 @@ export default class UpdateToday extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     const newDaily = {
       username: this.props.username,
       date: this.state.date,
@@ -61,54 +63,58 @@ export default class UpdateToday extends Component {
       running_time: this.state.running_time,
       exercising_time: this.state.exercising_time,
     };
-
-    const sentData = await axios.put(
-      "http://localhost:8000/users/updatedaily",
+    console.log(newDaily);
+    const sendDdata = await axios.put(
+      `http://localhost:8000/users/updatefeed/${this.props.username}`,
       newDaily
-    );
-
-    //ADD TO IF STATEMENT TO UPDATE ONLY ON THE LATEST DATE
-    const sendCurrent = await axios.post(
-      `http://localhost:8000/users/update/${this.props.id}`,
-      { currentWeight: this.state.todays_weight }
     );
     window.location = `/user/${this.props.username}`;
   }
+
   render() {
     return (
       <div>
-        <form style={StylesUser.info_form} onSubmit={this.handleSubmit}>
-          <h2>Welcome, {this.props.username}</h2>
-          <h2 style={StylesUser.info_title}>Today's info</h2>
-
-          {/*INPUTS */}
+        <form style={StylesUser.update_form} onSubmit={this.handleSubmit}>
+          <div
+            style={{
+              height: "100px",
+              width: "100px",
+              borderRadius: "100%",
+              background: `url(${this.props.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              boxShadow: "0px 5px 5px 0px grey",
+            }}
+          ></div>
+          <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
+            Update Info
+          </h2>
           <input
-            style={StylesUser.inputStyle}
+            style={StylesUser.update_input}
             type="date"
             value={this.state.date}
             onChange={this.handleDate}
           />
           <input
-            style={StylesUser.inputStyle}
+            style={StylesUser.update_input}
             type="number"
             placeholder="Weight"
-            step="0.1"
             onChange={this.handleWeight}
           />
           <input
-            style={StylesUser.inputStyle}
+            style={StylesUser.update_input}
             type="number"
             placeholder="Walking time"
             onChange={this.handleWalkingTime}
           />
           <input
-            style={StylesUser.inputStyle}
+            style={StylesUser.update_input}
             type="number"
             placeholder="Running time"
             onChange={this.handleRunningTime}
           />
           <input
-            style={StylesUser.inputStyle}
+            style={StylesUser.update_input}
             type="number"
             placeholder="Exercising time"
             onChange={this.handleExercise}

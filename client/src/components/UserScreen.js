@@ -3,6 +3,7 @@ import WeightChart from "./WeightChart";
 import StylesUser from "./StylesUser";
 import ExerciseChart from "./ExerciseChart";
 import UpdateToday from "./UpdateToday";
+import UpdateDaily from "./UpdateDaily";
 
 export default class UserScreen extends Component {
   constructor(props) {
@@ -20,7 +21,9 @@ export default class UserScreen extends Component {
       goalWeight: "",
       currentWeight: "",
       daily: [],
+      image: "",
       difference: this.currentWeight - this.goalWeight,
+      id: "",
     };
   }
 
@@ -30,19 +33,46 @@ export default class UserScreen extends Component {
     );
     const person = await data.json();
 
+    const dates = await person.daily.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+
     this.setState({
       username: person.username,
-      currentWeight: person.currentWeight,
+      //currentWeight: person.daily.slice(-1)[0].todays_weight,
       goalWeight: person.goal,
-      daily: person.daily,
+      image: person.image,
+      daily: dates,
+      id: person._id,
     });
+
+    //EXPERIMENTAL
+    if (person.daily == undefined) {
+      this.setState({
+        currentWeight: 0,
+      });
+    } else {
+      this.setState({
+        currentWeight: person.daily.slice(-1)[0].todays_weight,
+      });
+    }
   }
 
   render() {
     return (
       <div style={StylesUser.user_screen}>
         {/* LEFT SITE FORM */}
-        <UpdateToday username={this.state.username} date={this.state.date}/>
+        <UpdateToday
+          username={this.state.username}
+          date={this.state.date}
+          id={this.state.id}
+        />
+        <UpdateDaily
+          image={this.state.image}
+          username={this.state.username}
+          date={this.state.date}
+          id={this.state.id}
+        />
 
         {/*Current stats */}
         <div style={StylesUser.todays_data}>
@@ -67,56 +97,6 @@ export default class UserScreen extends Component {
         {/*CHARTS */}
         <WeightChart daily={this.state.daily} />
         <ExerciseChart daily={this.state.daily} />
-
-        <div>
-          <form style={StylesUser.update_form}>
-            <div
-              style={{
-                height: "100px",
-                width: "100px",
-                borderRadius: "100%",
-                background:
-                  "url(https://scontent-mad1-1.xx.fbcdn.net/v/t1.0-9/11924940_1007936535895309_2033047478123485509_n.jpg?_nc_cat=104&_nc_sid=09cbfe&_nc_ohc=OFgLZKMBmTwAX8t0mia&_nc_ht=scontent-mad1-1.xx&oh=6b0c08c5377b247f69c3ce968765aa0e&oe=5F3ED0EC)",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                boxShadow: "0px 5px 10px 0px grey",
-              }}
-            ></div>
-            <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
-              Update Info
-            </h2>
-            <input
-              style={StylesUser.update_input}
-              type="date"
-              value={this.state.date}
-            />
-            <input
-              style={StylesUser.update_input}
-              type="number"
-              placeholder="Weight"
-            />
-            <input
-              style={StylesUser.update_input}
-              type="number"
-              placeholder="Walking time"
-            />
-            <input
-              style={StylesUser.update_input}
-              type="number"
-              placeholder="Running time"
-            />
-            <input
-              style={StylesUser.update_input}
-              type="number"
-              placeholder="Exercising time"
-            />
-            <input
-              style={StylesUser.inputStyleSave}
-              type="submit"
-              value="SAVE"
-            />
-          </form>
-        </div>
       </div>
     );
   }

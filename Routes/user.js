@@ -70,8 +70,8 @@ route.put("/updatedaily", async (req, res) => {
 
   try {
     const userfound = await User.updateOne(
-      { username: req.body.username },
-      { $push: { daily: [newFeed] } }
+      { username: req.body.username }, //!NEED TO SEE IF DATES IN DAILY EXIST
+      { $addToSet: { daily: [newFeed] } }
     );
     res.json(userfound);
   } catch (error) {
@@ -79,12 +79,12 @@ route.put("/updatedaily", async (req, res) => {
   }
 });
 
-//UPDATE A SPECIFIC DAILY NEED TO GET THE SPECIFIC OBJECT INSTEAD OF USER
+//UPDATE A SPECIFIC DAILY OF USER
 route.put("/updatefeed/:username", async (req, res) => {
   try {
-    const filtername = req.params.username;
+    const filtername = req.body.username;
     const daily = await User.updateOne(
-      { username: filtername, "daily.date": req.params.date },
+      { username: filtername, "daily.date": req.body.date },
       {
         $set: {
           "daily.$.date": req.body.date,
@@ -101,17 +101,17 @@ route.put("/updatefeed/:username", async (req, res) => {
   }
 });
 
-//!!UPDATE CURRENT OF THE PERSON NEEDS FIX
-route.put("/updatecurrent", async (req, res) => {
-  try {
-    const userfound = await User.findOneAndUpdate(
-      { _id: req.body.id },
-      { $set: { currentWeight: req.body.currentWeight } }
-    );
-    res.json(userfound);
-  } catch (error) {
-    res.json(error);
-  }
+//UPDATES THE CURRENT WEIGHT OF USER
+route.post("/update/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.currentWeight = req.body.currentWeight;
+      user
+        .save()
+        .then(() => res.json(`currentWeight updated`))
+        .catch((err) => res.status(400).json(err));
+    })
+    .catch((err) => res.status(400).json(err));
 });
 
 module.exports = route;

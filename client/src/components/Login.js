@@ -42,7 +42,6 @@ export default class Login extends Component {
     });
 
     if (this.state.currentUser[0].password === this.state.password) {
-      console.log("you are in!");
       this.setState({ redirect: true });
     } else {
       console.log("showsomething");
