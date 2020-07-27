@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../Models/User");
 const mongoose = require("mongoose");
+const { json } = require("body-parser");
 
 //Setting the route middleware
 const route = express.Router();
@@ -74,6 +75,22 @@ route.put("/updatedaily", async (req, res) => {
       { $addToSet: { daily: [newFeed] } }
     );
     res.json(userfound);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+//GET DATA BY DATE SPECIFIC USER AND DATE
+route.get("/checkdailydata/:username/:date", async (req, res) => {
+  try {
+    const userfound = await User.find({
+      username: req.params.username,
+      "daily.date": req.params.date,
+    });
+    const userdaily = await userfound[0].daily.find(
+      (daily) => daily.date == req.body.date
+    );
+    res.json(userdaily);
   } catch (error) {
     res.json(error);
   }

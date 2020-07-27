@@ -22,10 +22,31 @@ export default class UpdateDaily extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleDate(e) {
+  
+  async handleDate(e) {
     this.setState({
       date: e.target.value,
     });
+
+    //!?!EXPERIMENTAL TO SEE IF WE CAN FETCH DATA AND PUT IT ON THE FORM
+    //!WORKS IN POSTMAN NOT FETCHING DATA
+    try {
+      const fetchedData = await fetch(
+        `http://localhost:8000/users/checkdailydata/${this.props.username}/${this.state.date}`
+      );
+      const user = await fetchedData.json();
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+    //const user = await fetchedData.json();
+    /*
+    this.setState({
+      todays_weight: user.todays_weight,
+      walking_time: user.walking_time,
+      running_time: user.running_time,
+      exercising_time: user.exercising_time,
+    });*/
     
   }
 
@@ -80,7 +101,7 @@ export default class UpdateDaily extends Component {
               height: "100px",
               width: "100px",
               borderRadius: "100%",
-              background: `url(${this.props.image})`,
+              backgroundImage: `url(${this.props.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               boxShadow: "0px 5px 5px 0px grey",
@@ -100,24 +121,28 @@ export default class UpdateDaily extends Component {
             type="number"
             placeholder="Weight"
             onChange={this.handleWeight}
+            value={this.state.todays_weight}
           />
           <input
             style={StylesUser.update_input}
             type="number"
             placeholder="Walking time"
             onChange={this.handleWalkingTime}
+            value={this.state.walking_time}
           />
           <input
             style={StylesUser.update_input}
             type="number"
             placeholder="Running time"
             onChange={this.handleRunningTime}
+            value={this.state.running_time}
           />
           <input
             style={StylesUser.update_input}
             type="number"
             placeholder="Exercising time"
             onChange={this.handleExercise}
+            value={this.state.exercising_time}
           />
           <input style={StylesUser.inputStyleSave} type="submit" value="SAVE" />
         </form>
