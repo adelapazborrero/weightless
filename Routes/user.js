@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../Models/User");
 const mongoose = require("mongoose");
 const { json } = require("body-parser");
+const { find } = require("../Models/User");
 
 //Setting the route middleware
 const route = express.Router();
@@ -130,5 +131,26 @@ route.post("/update/:id", (req, res) => {
     })
     .catch((err) => res.status(400).json(err));
 });
+
+//DELETE SPECIFIC DATE OF USER
+route.delete("/delete/:username/:date", async (req, res) => {
+  try {
+    const filtername = req.params.username;
+    const daily = await User.updateOne(
+      { username: filtername, "daily.date": req.params.date },
+      {
+        $pull: {
+          daily: { date: req.params.date },
+        },
+      }
+    );
+    res.json(daily);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+//UPDATE THE GOAL OF A SPECIFIC USER
+//route.put()
 
 module.exports = route;

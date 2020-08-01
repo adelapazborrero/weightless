@@ -1,6 +1,6 @@
 const mainColor = "dodgerblue";
 const mainFont = "Poppins";
-const hoverColor = "#730023";
+const hoverColor = "#1976D2";
 
 const styles = {
   mainpage: {
@@ -124,7 +124,7 @@ const styles = {
     right: "25%",
     left: "25%",
     backgroundColor: "rgb(255, 255, 255, 0.8)",
-    overflow:"hidden"
+    overflow: "hidden",
   },
   signin_form: {
     width: "60%",

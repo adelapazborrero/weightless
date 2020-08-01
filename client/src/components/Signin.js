@@ -84,9 +84,9 @@ export default class Signin extends Component {
       username: this.state.username,
       date: this.state.date,
       todays_weight: this.state.currentWeight,
-      walking_time: 0,
-      running_time: 0,
-      exercising_time: 0,
+      walking_time: "0",
+      running_time: "0",
+      exercising_time: "0",
     };
     const sentData = await axios.put(
       "http://localhost:8000/users/updatedaily",

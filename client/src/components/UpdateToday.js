@@ -52,7 +52,8 @@ export default class UpdateToday extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
+    
+    
     const newDaily = {
       username: this.props.username,
       date: this.state.date,

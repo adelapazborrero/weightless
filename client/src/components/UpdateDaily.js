@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import StylesUser from "./StylesUser";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 export default class UpdateDaily extends Component {
   constructor(props) {
@@ -22,7 +23,6 @@ export default class UpdateDaily extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  
   async handleDate(e) {
     this.setState({
       date: e.target.value,
@@ -47,7 +47,6 @@ export default class UpdateDaily extends Component {
       running_time: user.running_time,
       exercising_time: user.exercising_time,
     });*/
-    
   }
 
   handleWeight(e) {
@@ -95,18 +94,13 @@ export default class UpdateDaily extends Component {
   render() {
     return (
       <div>
-        <form style={StylesUser.update_form} onSubmit={this.handleSubmit}>
-          <div
-            style={{
-              height: "100px",
-              width: "100px",
-              borderRadius: "100%",
-              backgroundImage: `url(${this.props.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              boxShadow: "0px 5px 5px 0px grey",
-            }}
-          ></div>
+        <motion.form
+          style={StylesUser.diff_menus}
+          onSubmit={this.handleSubmit}
+          initial={{ y: "100vh" }}
+          animate={this.props.opened ? "open" : "close"}
+          variants={variants1}
+        >
           <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
             Update Info
           </h2>
@@ -145,8 +139,13 @@ export default class UpdateDaily extends Component {
             value={this.state.exercising_time}
           />
           <input style={StylesUser.inputStyleSave} type="submit" value="SAVE" />
-        </form>
+        </motion.form>
       </div>
     );
   }
 }
+
+const variants1 = {
+  open: { y: 0 },
+  close: { y: "100vh"},
+};

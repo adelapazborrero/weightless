@@ -4,6 +4,10 @@ import StylesUser from "./StylesUser";
 import ExerciseChart from "./ExerciseChart";
 import UpdateToday from "./UpdateToday";
 import UpdateDaily from "./UpdateDaily";
+import CurrentStats from "./CurrentStats";
+import UpdateGoal from "./UpdateGoal";
+import DeleteRecord from "./DeleteRecord";
+import SettingsMenu from "./SettingsMenu";
 
 export default class UserScreen extends Component {
   constructor(props) {
@@ -12,7 +16,9 @@ export default class UserScreen extends Component {
     let year = today.getFullYear();
     let month = today.getMonth() + 1;
     let day = today.getDate();
-    let todayDate = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day}`;
+    let todayDate = `${year}-${month < 10 ? `0${month}` : `${month}`}-${
+      day < 10 ? `0${day}` : `${day}`
+    }`;
 
     this.state = {
       currentUser: this.props.location.state[0],
@@ -24,7 +30,17 @@ export default class UserScreen extends Component {
       image: "",
       difference: this.currentWeight - this.goalWeight,
       id: "",
+      //Open different menus
+      open_update_menu: false,
+      open_goal_menu: false,
+      open_delete_menu: false,
+      open_settings_menu: false,
     };
+
+    this.openUpdate = this.openUpdate.bind(this);
+    this.openGoal = this.openGoal.bind(this);
+    this.openDelete = this.openDelete.bind(this);
+    this.openSettings = this.openSettings.bind(this);
   }
 
   async componentDidMount() {
@@ -58,46 +74,116 @@ export default class UserScreen extends Component {
     }
   }
 
-  render() {
-    return (
-      <div style={StylesUser.user_screen}>
-        {/* LEFT SITE FORM */}
-        <UpdateToday
-          username={this.state.username}
-          date={this.state.date}
-          id={this.state.id}
-        />
-        <UpdateDaily
-          image={this.state.image}
-          username={this.state.username}
-          date={this.state.date}
-          id={this.state.id}
-        />
+  //OPEN MENUS
+  openUpdate() {
+    this.setState({
+      open_update_menu: true,
+    });
+  }
 
-        {/*Current stats */}
-        <div style={StylesUser.todays_data}>
-          <div style={StylesUser.todays_data_container}>
-            <h3>Current</h3>
-            <h3 style={{ fontWeight: "normal" }}>
-              {this.state.currentWeight}kg
-            </h3>
-          </div>
-          <div style={StylesUser.todays_data_container}>
-            <h3>Goal</h3>
-            <h3 style={{ fontWeight: "normal" }}>{this.state.goalWeight}kg</h3>
-          </div>
-          <div style={StylesUser.todays_data_container}>
-            <h3>Diff</h3>
-            <h3 style={{ fontWeight: "normal" }}>
-              {(this.state.currentWeight - this.state.goalWeight).toFixed(1)}kg
-            </h3>
+  openGoal() {
+    this.setState({
+      open_goal_menu: true,
+    });
+  }
+
+  openDelete() {
+    this.setState({
+      open_delete_menu: true,
+    });
+  }
+
+  openSettings() {
+    this.setState({
+      open_settings_menu: true,
+    });
+  }
+
+  render() {
+    try {
+      return (
+        <div style={StylesUser.user_screen}>
+          {/* LEFT SITE FORM */}
+          <UpdateToday
+            username={this.state.username}
+            date={this.state.date}
+            id={this.state.id}
+          />
+
+          {/*RIGHT MENUS */}
+          <UpdateDaily
+            image={this.state.image}
+            username={this.state.username}
+            date={this.state.date}
+            id={this.state.id}
+            opened={this.state.open_update_menu}
+          />
+          <UpdateGoal opened={this.state.open_goal_menu} />
+          <DeleteRecord
+            opened={this.state.open_delete_menu}
+            username={this.state.username}
+            date={this.state.date}
+          />
+          <SettingsMenu opened={this.state.open_settings_menu} />
+
+          {/*Current stats */}
+          <CurrentStats
+            goalWeight={this.state.goalWeight}
+            currentWeight={this.state.currentWeight}
+          />
+
+          {/*CHARTS */}
+          <WeightChart daily={this.state.daily} />
+          <ExerciseChart daily={this.state.daily} />
+
+          {/*RIGHT MENU WITH PHOTO AND BUTTONS */}
+          <div style={StylesUser.update_form}>
+            <div
+              style={{
+                height: "100px",
+                width: "100px",
+                borderRadius: "100%",
+                backgroundImage: `url(${this.state.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                boxShadow: "0px 5px 5px 0px grey",
+              }}
+            ></div>
+
+            <button style={StylesUser.buttonsMenu} onClick={this.openGoal}>
+              UPDATE GOAL
+            </button>
+            <button style={StylesUser.buttonsMenu} onClick={this.openUpdate}>
+              UPDATE RECORD
+            </button>
+            <button style={StylesUser.buttonsMenu} onClick={this.openDelete}>
+              DELETE RECORD
+            </button>
+            <button style={StylesUser.buttonsMenu} onClick={this.openSettings}>
+              SETTINGS
+            </button>
+            <button
+              style={{
+                fontFamily: "Poppins",
+                border: "none",
+                background: "none",
+                color: "dodgerblue",
+                fontWeight: "bold",
+                cursor: "pointer",
+                outline: "none",
+              }}
+            >
+              Logout
+            </button>
           </div>
         </div>
-
-        {/*CHARTS */}
-        <WeightChart daily={this.state.daily} />
-        <ExerciseChart daily={this.state.daily} />
-      </div>
-    );
+      );
+    } catch (error) {
+      return (
+        <div>
+          <h1>You need to be logged in to access this information</h1>
+        </div>
+      );
+    }
   }
 }
