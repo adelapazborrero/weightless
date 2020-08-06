@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StylesUser from "./StylesUser";
 import axios from "axios";
 import { motion } from "framer-motion";
+import searchIcon from "../images/icon-search.png";
 
 export default class UpdateDaily extends Component {
   constructor(props) {
@@ -115,13 +116,20 @@ export default class UpdateDaily extends Component {
           <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
             Update Info
           </h2>
-          <button onClick={this.searchDate}>Search</button>
-          <input
-            style={StylesUser.update_input}
-            type="date"
-            value={this.state.date}
-            onChange={this.handleDate}
-          />
+          <div style={{ display: "flex" , width:"70%"}}>
+            <input
+              style={StylesUser.update_input}
+              type="date"
+              value={this.state.date}
+              onChange={this.handleDate}
+            />
+            <img
+              src={searchIcon}
+              style={StylesUser.searchButton}
+              onClick={this.searchDate}
+            />
+          </div>
+
           <input
             style={StylesUser.update_input}
             type="number"

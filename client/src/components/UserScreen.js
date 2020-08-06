@@ -206,6 +206,9 @@ export default class UserScreen extends Component {
                 cursor: "pointer",
                 outline: "none",
               }}
+              onClick={() => {
+                window.location = "/";
+              }}
             >
               Logout
             </button>

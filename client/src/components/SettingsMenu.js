@@ -17,6 +17,7 @@ export default class SettingsMenu extends Component {
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
   }
 
   async componentDidMount() {
@@ -64,6 +65,18 @@ export default class SettingsMenu extends Component {
         updatedData
       );
       window.location = `/user/${this.props.username}`;
+    } else {
+      window.location = `/user/${this.props.username}`;
+    }
+  }
+
+  deleteAccount(e) {
+    e.preventDefault();
+
+    const relate = window.confirm("Do you want to delete your account?");
+    if (relate) {
+      axios.delete(`http://localhost:8000/users/deleteuser/${this.props.id}`);
+      window.location = `/`;
     } else {
       window.location = `/user/${this.props.username}`;
     }
@@ -124,6 +137,7 @@ export default class SettingsMenu extends Component {
               cursor: "pointer",
               outline: "none",
             }}
+            onClick={this.deleteAccount}
           >
             Delete Acount
           </button>

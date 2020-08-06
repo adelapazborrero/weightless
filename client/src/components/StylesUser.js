@@ -87,7 +87,7 @@ const StylesUser = {
     backgroundColor: "#EFEFEF",
 
     //to doublecheck Style
-    opacity: 0.7,
+    opacity: 1,
   },
   buttonsMenu: {
     padding: 10,
@@ -125,6 +125,15 @@ const StylesUser = {
     fontFamily: Styles.mainFont,
     color: Styles.mainColor,
     fontSize: "15px",
+  },
+  searchButton: {
+    height: "24px",
+    width: "24px",
+    padding: "5px",
+    border: "solid 1.3px dodgerblue",
+    borderRadius: "10px",
+    cursor: "pointer",
+    marginLeft: "5px",
   },
 };
 
