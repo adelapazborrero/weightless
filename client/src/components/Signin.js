@@ -23,6 +23,9 @@ export default class Signin extends Component {
       currentWeight: "",
       date: todayDate,
       userSaved: false,
+      walking_time: "",
+      running_time: "",
+      exercising_time: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
@@ -30,6 +33,9 @@ export default class Signin extends Component {
     this.handleImage = this.handleImage.bind(this);
     this.handleGoal = this.handleGoal.bind(this);
     this.handleCurrentWeight = this.handleCurrentWeight.bind(this);
+    this.handleWalkingTime = this.handleWalkingTime.bind(this);
+    this.handleRunningTime = this.handleRunningTime.bind(this);
+    this.handleExercise = this.handleExercise.bind(this);
   }
 
   handleCurrentWeight(e) {
@@ -60,51 +66,70 @@ export default class Signin extends Component {
     });
   }
 
+  handleWalkingTime(e) {
+    this.setState({
+      walking_time: e.target.value,
+    });
+  }
+
+  handleRunningTime(e) {
+    this.setState({
+      running_time: e.target.value,
+    });
+  }
+
+  handleExercise(e) {
+    this.setState({
+      exercising_time: e.target.value,
+    });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
 
-    //!NEED TO DOUBLE CHECK IF NAME EXISTS
-    //POSTS A NEW USER TO THE DATABASE
-    const newUser = {
-      image: this.state.image,
-      username: this.state.username,
-      password: this.state.password,
-      goal: this.state.goal,
-      currentWeight: this.state.currentWeight,
-      daily: [],
-    };
-    const datatosave = await axios.post(
-      "http://localhost:8000/users/addnewuser",
-      newUser
-    );
+    try {
+      const newUser = {
+        image: this.state.image,
+        username: this.state.username,
+        password: this.state.password,
+        goal: this.state.goal,
+        currentWeight: this.state.currentWeight,
+        daily: [],
+      };
+      const datatosave = await axios.post(
+        "http://localhost:8000/users/addnewuser",
+        newUser
+      );
 
-    //CREATES THE FIRST LOG OF WEIGHT NEEDED TO OPEN THE PAGE
-    const newDaily = {
-      username: this.state.username,
-      date: this.state.date,
-      todays_weight: this.state.currentWeight,
-      walking_time: "0",
-      running_time: "0",
-      exercising_time: "0",
-    };
-    const sentData = await axios.put(
-      "http://localhost:8000/users/updatedaily",
-      newDaily
-    );
+      //CREATES THE FIRST LOG OF WEIGHT NEEDED TO OPEN THE PAGE
+      const newDaily = {
+        username: this.state.username,
+        date: this.state.date,
+        todays_weight: this.state.currentWeight,
+        walking_time: this.state.walking_time,
+        running_time: this.state.running_time,
+        exercising_time: this.state.exercising_time,
+      };
+      const sentData = await axios.put(
+        "http://localhost:8000/users/updatedaily",
+        newDaily
+      );
 
-    //FETCHES THE DATA OF THE CREATED USER AND REDIRECTS
-    const fetchedData = await fetch(
-      `http://localhost:8000/users/filtered/${this.state.username}`
-    );
+      //FETCHES THE DATA OF THE CREATED USER AND REDIRECTS
+      const fetchedData = await fetch(
+        `http://localhost:8000/users/filtered/${this.state.username}`
+      );
 
-    const user = await fetchedData.json();
+      const user = await fetchedData.json();
 
-    this.setState({
-      currentUser: user,
-    });
+      this.setState({
+        currentUser: user,
+      });
 
-    this.setState({ userSaved: true });
+      this.setState({ userSaved: true });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
@@ -138,6 +163,7 @@ export default class Signin extends Component {
               name="image"
               placeholder="Paste the url of an imgage"
               onChange={this.handleImage}
+              required
             />
             <br />
             <label htmlFor="username" style={Styles.label}>
@@ -149,6 +175,7 @@ export default class Signin extends Component {
               name="username"
               placeholder="Set your login username"
               onChange={this.handleUsername}
+              required
             />
             <br />
             <label htmlFor="password" style={Styles.label}>
@@ -160,6 +187,7 @@ export default class Signin extends Component {
               name="password"
               placeholder="Set your login password"
               onChange={this.handlePassword}
+              required
             />
             <br />
             <label style={Styles.label}>Current and Goal</label>
@@ -168,14 +196,36 @@ export default class Signin extends Component {
               type="number"
               placeholder="What is your current weight in kg?"
               onChange={this.handleCurrentWeight}
+              required
             />
             <input
               style={Styles.input}
               type="number"
               placeholder="What is your goal weight in kg?"
               onChange={this.handleGoal}
+              required
             />
-            <br />
+            <input
+              style={Styles.input}
+              type="number"
+              placeholder="How long did you walk today?"
+              onChange={this.handleWalkingTime}
+              required
+            />
+            <input
+              style={Styles.input}
+              type="number"
+              placeholder="How long did you run today?"
+              onChange={this.handleRunningTime}
+              required
+            />
+            <input
+              style={Styles.input}
+              type="number"
+              placeholder="How long did you exercise today?"
+              onChange={this.handleExercise}
+              required
+            />
             <motion.input
               whileHover={{ backgroundColor: Styles.hoverColor }}
               type="submit"

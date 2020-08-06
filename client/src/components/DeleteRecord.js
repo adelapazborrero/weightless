@@ -47,6 +47,11 @@ export default class DeleteRecord extends Component {
           initial={{ y: "100vh" }}
           animate={this.props.opened ? "open" : "close"}
           variants={variants1}
+          transition={{
+            type: "spring",
+            damping: 800,
+            mass: 0.1,
+          }}
         >
           <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
             Delete Record

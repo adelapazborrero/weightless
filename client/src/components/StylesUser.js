@@ -97,7 +97,7 @@ const StylesUser = {
     backgroundColor: Styles.mainColor,
     outline: "none",
     cursor: "pointer",
-    width:"50%"
+    width: "50%",
   },
   diff_menus: {
     fontFamily: Styles.mainFont,
@@ -112,7 +112,19 @@ const StylesUser = {
     position: "fixed",
     bottom: "0",
     right: "0",
-    zIndex: 1
+    zIndex: 1,
+  },
+  closeButton: {
+    outline: "none",
+    border: "none",
+    position: "relative",
+    backgroundColor: "white",
+    bottom: "40px",
+    left: 90,
+    cursor: "pointer",
+    fontFamily: Styles.mainFont,
+    color: Styles.mainColor,
+    fontSize: "15px",
   },
 };
 

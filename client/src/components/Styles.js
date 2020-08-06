@@ -124,7 +124,7 @@ const styles = {
     right: "25%",
     left: "25%",
     backgroundColor: "rgb(255, 255, 255, 0.8)",
-    overflow: "hidden",
+    overflowY: "scroll",
   },
   signin_form: {
     width: "60%",

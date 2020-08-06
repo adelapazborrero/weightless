@@ -52,8 +52,7 @@ export default class UpdateToday extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    
-    
+
     const newDaily = {
       username: this.props.username,
       date: this.state.date,
@@ -95,6 +94,7 @@ export default class UpdateToday extends Component {
             placeholder="Weight"
             step="0.1"
             onChange={this.handleWeight}
+            required
           />
           <input
             style={StylesUser.inputStyle}

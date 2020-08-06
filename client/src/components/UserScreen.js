@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { motion } from "framer-motion";
 import WeightChart from "./WeightChart";
 import StylesUser from "./StylesUser";
 import ExerciseChart from "./ExerciseChart";
@@ -35,12 +36,14 @@ export default class UserScreen extends Component {
       open_goal_menu: false,
       open_delete_menu: false,
       open_settings_menu: false,
+      close_button: false,
     };
 
     this.openUpdate = this.openUpdate.bind(this);
     this.openGoal = this.openGoal.bind(this);
     this.openDelete = this.openDelete.bind(this);
     this.openSettings = this.openSettings.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
   }
 
   async componentDidMount() {
@@ -78,24 +81,38 @@ export default class UserScreen extends Component {
   openUpdate() {
     this.setState({
       open_update_menu: true,
+      close_button: true,
     });
   }
 
   openGoal() {
     this.setState({
       open_goal_menu: true,
+      close_button: true,
     });
   }
 
   openDelete() {
     this.setState({
       open_delete_menu: true,
+      close_button: true,
     });
   }
 
   openSettings() {
     this.setState({
       open_settings_menu: true,
+      close_button: true,
+    });
+  }
+
+  closeMenu() {
+    this.setState({
+      open_update_menu: false,
+      open_goal_menu: false,
+      open_delete_menu: false,
+      open_settings_menu: false,
+      close_button: false,
     });
   }
 
@@ -118,13 +135,20 @@ export default class UserScreen extends Component {
             id={this.state.id}
             opened={this.state.open_update_menu}
           />
-          <UpdateGoal opened={this.state.open_goal_menu} />
+          <UpdateGoal
+            opened={this.state.open_goal_menu}
+            username={this.state.username}
+          />
           <DeleteRecord
             opened={this.state.open_delete_menu}
             username={this.state.username}
             date={this.state.date}
           />
-          <SettingsMenu opened={this.state.open_settings_menu} />
+          <SettingsMenu
+            opened={this.state.open_settings_menu}
+            username={this.state.username}
+            id={this.state.currentUser._id}
+          />
 
           {/*Current stats */}
           <CurrentStats
@@ -149,6 +173,16 @@ export default class UserScreen extends Component {
                 boxShadow: "0px 5px 5px 0px grey",
               }}
             ></div>
+            <motion.button
+              style={StylesUser.closeButton}
+              onClick={this.closeMenu}
+              initial={{ opacity: 0, pointerEvents: "none" }}
+              animate={this.state.close_button ? "open" : "close"}
+              variants={variantsopen}
+              transition={{ delay: 0.2 }}
+            >
+              Close
+            </motion.button>
 
             <button style={StylesUser.buttonsMenu} onClick={this.openGoal}>
               UPDATE GOAL
@@ -187,3 +221,8 @@ export default class UserScreen extends Component {
     }
   }
 }
+
+const variantsopen = {
+  open: { opacity: 1, pointerEvents: "auto" },
+  close: { opacity: 0, pointerEvents: "none" },
+};

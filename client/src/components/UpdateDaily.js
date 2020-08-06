@@ -8,7 +8,7 @@ export default class UpdateDaily extends Component {
     super(props);
 
     this.state = {
-      date: this.props.date,
+      date: "",
       todays_weight: "",
       walking_time: "",
       running_time: "",
@@ -21,32 +21,38 @@ export default class UpdateDaily extends Component {
     this.handleRunningTime = this.handleRunningTime.bind(this);
     this.handleExercise = this.handleExercise.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.searchDate = this.searchDate.bind(this);
+  }
+
+  //Searches for the input date and fetches the data to display it on the form
+  async searchDate(e) {
+    e.preventDefault();
+    try {
+      const fetchedData = await fetch(
+        `http://localhost:8000/users/checkdailydata/${this.props.username}/${this.state.date}`
+      );
+      const user = await fetchedData.json();
+
+      this.setState({
+        todays_weight: user[0].todays_weight,
+        walking_time: user[0].walking_time,
+        running_time: user[0].running_time,
+        exercising_time: user[0].exercising_time,
+      });
+    } catch (error) {
+      this.setState({
+        todays_weight: "",
+        walking_time: "",
+        running_time: "",
+        exercising_time: "",
+      });
+    }
   }
 
   async handleDate(e) {
     this.setState({
       date: e.target.value,
     });
-
-    //!?!EXPERIMENTAL TO SEE IF WE CAN FETCH DATA AND PUT IT ON THE FORM
-    //!WORKS IN POSTMAN NOT FETCHING DATA
-    try {
-      const fetchedData = await fetch(
-        `http://localhost:8000/users/checkdailydata/${this.props.username}/${this.state.date}`
-      );
-      const user = await fetchedData.json();
-      console.log(user);
-    } catch (error) {
-      console.log(error);
-    }
-    //const user = await fetchedData.json();
-    /*
-    this.setState({
-      todays_weight: user.todays_weight,
-      walking_time: user.walking_time,
-      running_time: user.running_time,
-      exercising_time: user.exercising_time,
-    });*/
   }
 
   handleWeight(e) {
@@ -100,10 +106,16 @@ export default class UpdateDaily extends Component {
           initial={{ y: "100vh" }}
           animate={this.props.opened ? "open" : "close"}
           variants={variants1}
+          transition={{
+            type: "spring",
+            damping: 800,
+            mass: 0.1,
+          }}
         >
           <h2 style={{ fontFamily: "Poppins", fontWeight: "normal" }}>
             Update Info
           </h2>
+          <button onClick={this.searchDate}>Search</button>
           <input
             style={StylesUser.update_input}
             type="date"
@@ -147,5 +159,5 @@ export default class UpdateDaily extends Component {
 
 const variants1 = {
   open: { y: 0 },
-  close: { y: "100vh"},
+  close: { y: "100vh" },
 };

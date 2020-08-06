@@ -41,7 +41,7 @@ route.get("/filtered/:username", async (req, res) => {
 //------------
 
 //ADD NEW USER FROM SIGNIN SCREEN
-route.post("/addnewuser", async (req, res) => {
+route.post("/addnewuser", (req, res) => {
   const newUser = new User({
     image: req.body.image,
     username: req.body.username,
@@ -50,12 +50,20 @@ route.post("/addnewuser", async (req, res) => {
     currentWeight: req.body.currentWeight,
     daily: [],
   });
+  User.find({ username: req.body.username }, function (err, docs) {
+    if (docs.length) {
+      console.log("Name already taken");
+    } else {
+      newUser.save().then(() => res.json());
+    }
+  });
+  /*
   try {
     const savedUser = await newUser.save();
     res.json(savedUser);
   } catch (error) {
     res.json({ message: error });
-  }
+  }*/
 });
 
 //PUSH NEW DAILY INTO ARRAY OF SPECIFIC PERSON NEEDS TO UPDATE CURRENT WEIGHT
@@ -86,12 +94,14 @@ route.get("/checkdailydata/:username/:date", async (req, res) => {
   try {
     const userfound = await User.find({
       username: req.params.username,
-      "daily.date": req.params.date,
+      //"daily.date": req.body.date,
     });
     const userdaily = await userfound[0].daily.find(
-      (daily) => daily.date == req.body.date
+      (daily) => daily.date === req.params.date
     );
-    res.json(userdaily);
+    const data = [];
+    data.push(userdaily);
+    res.json(data);
   } catch (error) {
     res.json(error);
   }
@@ -151,6 +161,30 @@ route.delete("/delete/:username/:date", async (req, res) => {
 });
 
 //UPDATE THE GOAL OF A SPECIFIC USER
-//route.put()
+route.put("/changegoal/:username", async (req, res) => {
+  try {
+    const userUpdated = await User.updateOne(
+      {
+        username: req.params.username,
+      },
+      { goal: req.body.goal }
+    );
+    res.json(userUpdated);
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
+route.put("/updateuser/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      (user.image = req.body.image),
+        (user.username = req.body.username),
+        (user.password = req.body.password);
+
+      user.save().then(() => res.json(`Person updated`));
+    })
+    .catch((err) => res.status(400).json(err));
+});
 
 module.exports = route;
