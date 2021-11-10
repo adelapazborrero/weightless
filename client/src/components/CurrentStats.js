@@ -18,6 +18,7 @@ export default class CurrentStats extends Component {
           <h3 style={{ fontWeight: "normal" }}>
             {(this.props.currentWeight - this.props.goalWeight).toFixed(1)}kg
           </h3>
+          <h1>hello world</h1>
         </div>
       </div>
     );
